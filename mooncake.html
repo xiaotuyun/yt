@@ -1,4 +1,5 @@
 
+html_content = '''
 <!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>粒子月饼 - 旋转环效果</title><style> body, html {
@@ -8,7 +9,7 @@
     </style>
 </head>
 <body>
-    <iframe src="https://github.com/xiaotuyun/yt/index.html"></iframe>
+    <iframe src="file:///C:/Users/LENOVO/index.html"></iframe>
     <canvas id="canvas"></canvas>
     <script>
         var canvas = document.getElementById('canvas'),
@@ -190,7 +191,7 @@
         
                     // 修改 iframe 背景
         var iframe = document.querySelector('iframe');
-        iframe.src = "mooncake3.html";  // 切换为新的背景
+        iframe.src = "file:///C:/Users/LENOVO/mooncake3.html";  // 切换为新的背景
 
         poem = `影随风舞 清辉伴梦 遥祝秋月 快乐！`;
 
@@ -209,3 +210,16 @@
     </script>
 </body>
 </html>
+'''
+
+
+# Write the HTML content to a file
+with open("mooncake.html", "w", encoding="utf-8") as file:
+    file.write(html_content)
+
+print("HTML 文件已生成: mooncake.html")
+# Open the HTML file in the default web browser
+webbrowser.open("mooncake.html")
+
+
+######成功
