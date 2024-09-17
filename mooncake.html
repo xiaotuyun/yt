@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>粒子月饼 - 旋转环效果</title><style> body, html {
+ margin: 0; padding: 0;height: 100%;width: 100%;overflow: hidden; } iframe { position: fixed;top: 0; left: 0;width: 100%;
+ height: 100%;z-index: -2; /* 使iframe位于canvas后面 * border: none; }canvas {position: fixed; width: 100%; height: 100%; z-index: -1; /* canvas 位于iframe之上 */
+        }
+    </style>
+</head>
+<body>
+    <iframe src="file:///C:/Users/LENOVO/index.html"></iframe>
+    <canvas id="canvas"></canvas>
+    <script>
+        var canvas = document.getElementById('canvas'),
+            ctx = canvas.getContext('2d'),
+            w = canvas.width = window.innerWidth,
+            h = canvas.height = window.innerHeight,
+            particles = [],
+            maxParticles = 1200,  // 总粒子数量
+            mooncakeCenterX = w / 2,
+            mooncakeCenterY = h / 2,
+            mooncakeRadius = Math.min(w, h) / 5,  // 月饼的半径
+            petalCount = 9,  // 花瓣数量
+            rotationSpeed = 0.01; // 粒子环旋转速度
+
+        // 粒子类
+        function Particle(x, y, targetX, targetY, orbitRadius, angle) {
+            this.x = x;
+            this.y = y;
+            this.targetX = targetX;
+            this.targetY = targetY;
+            this.orbitRadius = orbitRadius;  // 粒子绕中心旋转的半径
+            this.angle = angle;  // 粒子当前的角度
+            this.speed = 0.05 + Math.random() * 0.03;  // 粒子到目标位置的移动速度
+            this.size = 2 + Math.random() * 3;  // 粒子大小
+        }
+
+        Particle.prototype.update = function () {
+            // 逐渐移动到目标位置
+            this.x += (this.targetX - this.x) * this.speed;
+            this.y += (this.targetY - this.y) * this.speed;
+        };
+
+        Particle.prototype.updateOrbit = function (centerX, centerY) {
+            // 更新粒子在环上的位置
+            this.angle += rotationSpeed;  // 角度减小，使其逆时针旋转
+            this.x = centerX + Math.cos(this.angle) * this.orbitRadius;
+            this.y = centerY + Math.sin(this.angle) * this.orbitRadius;
+        };
+
+        Particle.prototype.draw = function () {
+            ctx.fillStyle = 'rgba(255, 204, 0, 1)';  // 月饼的粒子颜色
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        };
+
+        // 创建月饼形状粒子
+        function createMooncakeParticles() {
+            // 创建月饼内部圆形粒子
+            for (var i = 0; i < maxParticles * 0.6; i++) {
+                var angle = Math.random() * Math.PI * 2;
+                var radius = Math.random() * mooncakeRadius;
+                var targetX = mooncakeCenterX + Math.cos(angle) * radius;
+                var targetY = mooncakeCenterY + Math.sin(angle) * radius;
+                var startX = Math.random() * w;
+                var startY = Math.random() * h;
+                particles.push(new Particle(startX, startY, targetX, targetY));
+            }
+
+            // 创建花瓣粒子
+            for (var i = 0; i < petalCount; i++) {
+                var petalAngle = (i / petalCount) * Math.PI * 2;
+                for (var j = 0; j < 70; j++) {  // 每个花瓣上的粒子数量
+                    var angle = Math.random() * Math.PI * 2;
+                    var petalRadius = mooncakeRadius + 1 + Math.random() * 55;
+                    var targetX = mooncakeCenterX + Math.cos(petalAngle) * petalRadius + Math.cos(angle) * 20;
+                    var targetY = mooncakeCenterY + Math.sin(petalAngle) * petalRadius + Math.sin(angle) * 10;
+                    var startX = Math.random() * w;
+                    var startY = Math.random() * h;
+                    particles.push(new Particle(startX, startY, targetX, targetY));
+                }
+            }
+        }
+
+        // 创建 “团圆” 字粒子
+        function createTextParticles(text) {
+            ctx.font = "bold 150px Arial";
+            ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+            ctx.fillText(text, mooncakeCenterX, mooncakeCenterY + 30);
+
+            var textData = ctx.getImageData(0, 0, w, h).data;
+
+            for (var y = 0; y < h; y += 6) {
+                for (var x = 0; x < w; x += 6) {
+                    var index = (y * w + x) * 4;
+                    if (textData[index + 3] > 128) {  // 检测字体轮廓
+                        var targetX = x;
+                        var targetY = y;
+                        var startX = Math.random() * w;
+                        var startY = Math.random() * h;
+                        particles.push(new Particle(startX, startY, targetX, targetY));
+                    }
+                }
+            }
+        }
+
+        // 创建外环旋转粒子
+        function createOuterRingParticles() {
+            var outerRadius = mooncakeRadius + 80;  // 外环的半径
+            var ringParticlesCount = 100;  // 外环粒子数量
+            for (var i = 0; i < ringParticlesCount; i++) {
+                var angle = (i / ringParticlesCount) * Math.PI * 2;
+                var x = mooncakeCenterX + Math.cos(angle) * outerRadius;
+                var y = mooncakeCenterY + Math.sin(angle) * outerRadius;
+                particles.push(new Particle(x, y, x, y, outerRadius, angle));
+            }
+        }
+
+        // 创建内环旋转粒子
+        function createInnerRingParticles() {
+            var innerRadius = mooncakeRadius - 75;  // 内环的半径
+            var ringParticlesCount = 80;  // 内环粒子数量
+            for (var i = 0; i < ringParticlesCount; i++) {
+                var angle = (i / ringParticlesCount) * Math.PI * 2;
+                var x = mooncakeCenterX + Math.cos(angle) * innerRadius;
+                var y = mooncakeCenterY + Math.sin(angle) * innerRadius;
+                particles.push(new Particle(x, y, x, y, innerRadius, angle));
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        // 创建花边粒子
+        function createBorderParticles() {
+            var borderRadius = mooncakeRadius + 125;  // 花边的半径
+            var borderParticlesCount = 150;  // 花边粒子数量
+            for (var i = 0; i < borderParticlesCount; i++) {
+                var angle = (i / borderParticlesCount) * Math.PI * 2;
+                var x = mooncakeCenterX + Math.cos(angle) * borderRadius;
+                var y = mooncakeCenterY + Math.sin(angle) * borderRadius;
+                particles.push(new Particle(x, y, x, y, borderRadius, angle));
+            }
+        }
+
+        // 初始化粒子
+        function initParticles() {
+            particles = [];
+            createMooncakeParticles();
+            createTextParticles("中   秋");
+            createOuterRingParticles();  // 添加外环粒子
+            createInnerRingParticles();  // 添加内环粒子
+            createBorderParticles();     // 添加花边粒子
+        }
+
+        // 动画循环
+        function animation() {
+            ctx.clearRect(0, 0, w, h);
+            for (var i = 0; i < particles.length; i++) {
+                if (particles[i].orbitRadius) {
+                    particles[i].updateOrbit(mooncakeCenterX, mooncakeCenterY);  // 更新环绕运动
+                } else {
+                    particles[i].update();
+                }
+                particles[i].draw();
+            }
+            requestAnimationFrame(animation);
+        }
+
+        // 初始化并开始动画
+        initParticles();
+        animation();
+        // 添加一个定时器，在 5 秒后重新排列粒子
+        setTimeout(function () {
+                     // 清空画布
+            ctx.clearRect(0, 0, w, h);
+
+            // 清空原有的粒子
+            particles = [];
+        
+                    // 修改 iframe 背景
+        var iframe = document.querySelector('iframe');
+        iframe.src = "file:///C:/Users/LENOVO/mooncake3.html";  // 切换为新的背景
+
+        poem = `影随风舞 清辉伴梦 遥祝秋月 快乐！`;
+
+        createTextParticles(poem);
+        }, 5000);  // 5000 毫秒，即 5 秒
+
+        // 窗口大小调整时更新
+        window.addEventListener('resize', function () {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+            mooncakeCenterX = w / 2;
+            mooncakeCenterY = h / 2;
+            mooncakeRadius = Math.min(w, h) / 5;
+            initParticles();
+        });
+    </script>
+</body>
+</html>
