@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mooncake Animation</title>
+    <meta name="Keywords" content="🥮">
+    <meta name="Description" content="🥮">
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+       
+            background: linear-gradient(180deg, #FFFAF0, #FF8C00); /* 暖色渐变背景 */
+        }
+
+        #child {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -75px;
+            margin-left: -100px;
+        }
+
+        h4 {
+            font-family: "Arial", sans-serif; /* 使用支持 emoji 的字体 */
+            font-size: 40px;
+            color: #FF8C00; /* 暖金色文字 */
+            position: relative;
+            top: -70px;
+            left: -65px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="child">
+        <h4></h4> <!-- 添加了一些文字 -->
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <script type="text/javascript">
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        var texts = 'Mid_Autumn Festival'.split('');
+        var fontSize = 25; // 增大字体大小，便于显示表情符号
+        var columns = canvas.width / fontSize;
+
+        // 用于计算输出文字时坐标，所以长度即为列数
+        var drops = [];
+        for (var x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function draw() {
+            // 让背景逐渐由透明到不透明
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'; // 使背景更加柔和
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // 文字颜色
+            ctx.fillStyle = '#FF8C00'; // 暖金色
+            ctx.font = fontSize + 'px Arial'; // 使用支持 emoji 的字体
+
+            // 逐行输出文字
+            for (var i = 0; i < drops.length; i++) {
+                var text = texts[Math.floor(Math.random() * texts.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height || Math.random() > 0.95) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(draw, 33);
+    </script>
+</body>
+
+</html>
