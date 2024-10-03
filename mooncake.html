@@ -48,28 +48,18 @@
         }
     </style>
 </head>
-<body>
-    <iframe src="your-iframe-source-url"></iframe>
-    <canvas id="myCanvas"></canvas>
-    <script>
-        var canvas = document.getElementById('myCanvas');
-        var ctx = canvas.getContext('2d');
-
-        // 设置 canvas 的大小为当前窗口大小
-        canvas.height = window.innerHeight;
-        canvas.width = window.innerWidth;
-
-
-    </script>
-</body>
-</html>
 
 <body>   
     <iframe src="https://xiaotuyun.github.io/yt/index.html"></iframe>
     <canvas id="canvas"></canvas>
     <script>
         var canvas = document.getElementById('canvas'),
-            ctx = canvas.getContext('2d'),
+        var ctx = canvas.getContext('2d');
+
+        // 设置 canvas 的大小为当前窗口大小
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+         
             w = canvas.width = window.innerWidth,
             h = canvas.height = window.innerHeight,
             particles = [],
