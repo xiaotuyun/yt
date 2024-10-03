@@ -10,45 +10,25 @@
             padding: 0;
             height: 100%;
             width: 100%;
-            overflow: hidden; /* 隐藏页面的滚动条 */
+            overflow: hidden;
         }
-
-        /* 设置滚动条样式 */
-        ::-webkit-scrollbar {
-            width: 10px; /* 设置滚动条的宽度 */
-        }
-
-        ::-webkit-scrollbar-track {
-            background-color: transparent; /* 将滚动条轨道的背景色设为透明 */
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background-color: rgba(0, 0, 0, 0.5); /* 滚动块的颜色，可调整为透明 */
-            border-radius: 10px; /* 圆角效果 */
-        }
-
         iframe {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2; /* iframe 位于 canvas 后面 */
+            z-index: -2; /* 使iframe位于canvas后面 */
             border: none;
         }
-
         canvas {
             position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* canvas 位于 iframe 之上 */
-            background-color: transparent; /* 透明背景 */
+            z-index: -1; /* canvas 位于iframe之上 */
         }
     </style>
 </head>
-
 <body>   
     <iframe src="https://xiaotuyun.github.io/yt/index.html"></iframe>
     <canvas id="canvas"></canvas>
