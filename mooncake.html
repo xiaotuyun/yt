@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,24 +10,10 @@
             padding: 0;
             height: 100%;
             width: 100%;
-            overflow: auto;
+            overflow: hidden; /* 隐藏页面的滚动条 */
         }
-        iframe {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2; /* 使iframe位于canvas后面 */
-            border: none;
-        }
-        canvas {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -1; /* canvas 位于iframe之上 */
-        }
-                /* 滚动条样式 */
+
+        /* 设置滚动条样式 */
         ::-webkit-scrollbar {
             width: 10px; /* 设置滚动条的宽度 */
         }
@@ -42,8 +26,44 @@
             background-color: rgba(0, 0, 0, 0.5); /* 滚动块的颜色，可调整为透明 */
             border-radius: 10px; /* 圆角效果 */
         }
+
+        iframe {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* iframe 位于 canvas 后面 */
+            border: none;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* canvas 位于 iframe 之上 */
+            background-color: transparent; /* 透明背景 */
+        }
     </style>
 </head>
+<body>
+    <iframe src="your-iframe-source-url"></iframe>
+    <canvas id="myCanvas"></canvas>
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+
+        // 设置 canvas 的大小为当前窗口大小
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+
+
+    </script>
+</body>
+</html>
+
 <body>   
     <iframe src="https://xiaotuyun.github.io/yt/index.html"></iframe>
     <canvas id="canvas"></canvas>
