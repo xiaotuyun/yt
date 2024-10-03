@@ -7,17 +7,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>粒子月饼 - 旋转环效果</title>
     <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: auto;
+        }
+        iframe {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* 使iframe位于canvas后面 */
+            border: none;
+        }
         canvas {
             position: fixed;
             width: 100%;
             height: 100%;
-            z-index: -1;
-       
+            z-index: -1; /* canvas 位于iframe之上 */
+        }
+                /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 10px; /* 设置滚动条的宽度 */
         }
 
+        ::-webkit-scrollbar-track {
+            background-color: transparent; /* 将滚动条轨道的背景色设为透明 */
+        }
 
-
-
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.5); /* 滚动块的颜色，可调整为透明 */
+            border-radius: 10px; /* 圆角效果 */
+        }
     </style>
 </head>
 <body>   
